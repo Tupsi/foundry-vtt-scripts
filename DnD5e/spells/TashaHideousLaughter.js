@@ -1,86 +1,101 @@
-//##################################
-// Read First!!! Requires both Dynamic Active Effects + Midi-QoL
-// DAE setup
-// Duration: Macro Repeat: End of each turn.
-// Effects: Either use Item Macro or Macro Execute, no args needed.
-//##################################
+// Macro Author: Tupsi#7299 (on discord) (initial macro from Crymic)
+// Macro version: 1.1
+// Foundry Version: 0.9.249
+// DnD5e Version: 1.5.7
+// Prerequisites: Advanced Macros, DAE, DFreds Convenient Effects (CE)
+//
+// Usage: Use as ItemMacro in the spell item
+//
+// Takes care of prone and the automated saving throw.
+// Does not check for Int > 4
+//
+// v 1.0 initial copy of Crymics macro
+// v 1.1 changed active effects to CE
 
-(async()=>{
+
 async function wait(ms) { return new Promise(resolve => { setTimeout(resolve, ms); }); }
-const lastArg = args[args.length-1];
-let tactor;
-if (lastArg.tokenId) tactor = canvas.tokens.get(lastArg.tokenId).actor;
-else tactor = game.actors.get(lastArg.actorId);
-const ttoken = canvas.tokens.get(lastArg.tokenId);
-const item = lastArg.efData.flags.dae.itemData;
-const DC = item.data.save.dc;
 
-async function savingThrow(){
-    let workflow = await MidiQOL.Workflow.getWorkflow(item._id);
-    let itemCard = await MidiQOL.showItemCard.bind(workflow.item)(false, workflow, false);
-    workflow.itemCardId = await itemCard.id;
-        await workflow.checkSaves(false);
-        await workflow.displaySaves(false, true);
-        let save = await workflow.saveResults[0];
-        game.dice3d.showForRoll(save);
-        if (await save._total >= DC) {
-            let removeConc = workflow.actor.effects.entries.find(i=> i.data.label === "Concentrating");
-            if(removeConc){
-                await workflow.actor.deleteEmbeddedEntity("ActiveEffect", removeConc.data._id);
-            } else {
-                await tactor.deleteEmbeddedEntity("ActiveEffect", lastArg.effectId);
-            }
+if (args[0].tag === "OnUse") {
+    let checkProne;
+    for (let targetUuid of args[0].failedSaveUuids) {
+        checkProne = await game.dfreds.effectInterface.hasEffectApplied('Prone', targetUuid);
+        if (!checkProne) {
+            await game.dfreds.effectInterface.addEffect({ effectName: 'Prone', uuid: targetUuid});
+        }
     }
-    
+    return;
 }
+
+const lastArg = args[args.length - 1];
+const tokenD = canvas.tokens.get(lastArg.tokenId);
+const actorD = canvas.tokens.get(lastArg.tokenId).actor;
+const itemD = lastArg.efData.flags.dae.itemData;
+const origin = lastArg.origin;
+const itemUuid = await fromUuid(origin);
+const caster = itemUuid.actor;
+const gameRound = game.combat ? game.combat.round : 0;
+const tokenUuid = canvas.tokens.get(lastArg.tokenId).actor.uuid;
 
 async function damageCheck(workflow) {
-    await wait(500);
-    let attackWorkflow = workflow.damageList.map((i)=> ({actorId : i?.actorID, appliedDamage : i?.appliedDamage, hpDamage : i?.hpDamage, newHP : i?.newHP, newTempHP : i?.newTempHP, oldHP : i?.oldHP, oldTempHP : i?.oldTempHP, tempDamage : i?.tempDamage, tokenId: i?.tokenId, totalDamage : i?.totalDamage})).filter(i=> i.tokenId === ttoken.id);
-    let lastAttack = attackWorkflow[attackWorkflow.length -1];
-    if(lastAttack?.totalDamage > 0){
-    savingThrow();
-    }
-}
-
-
-if(args[0]==="on"){
-    if(tactor.data.data.abilities.int.value <= 4) await tactor.deleteEmbeddedEntity("ActiveEffect", lastArg.effectId);
-    let hookId = Hooks.on("midi-qol.DamageRollComplete", damageCheck);
-    DAE.setFlag(tactor, "damgeApplied", 0);
-    DAE.setFlag(tactor, "hLaughter", hookId);
-    let curtHP = tactor.data.data.attributes.hp.value;
-    DAE.setFlag(tactor, "hLaughterHP", curtHP);
-    let condition = ["Prone", "Incapacitated"];
-    game.cub.addCondition(condition, ttoken);
-}
-
-if(args[0] === "each") {
-    let curtHP = tactor.data.data.attributes.hp.value;
-    DAE.setFlag(tactor, "hLaughterHP", curtHP);
-    let workflow = await MidiQOL.Workflow.getWorkflow(item._id);
-    let itemCard = await MidiQOL.showItemCard.bind(workflow.item)(false, workflow, false);
-    workflow.itemCardId = await itemCard.id;
+    console.warn("args inside damageCheck: ", args)
+    let effectData = [{
+        label: "Damage Save",
+        icon: "icons/skills/wounds/injury-triple-slash-bleed.webp",
+        origin: origin,
+        disabled: false,
+        flags: { dae: { specialDuration: ["isDamaged"] } },
+        duration: { rounds: 10, seconds: 60, startRound: gameRound, startTime: game.time.worldTime },
+        changes: [{ key: `flags.midi-qol.advantage.ability.save.all`, mode: 2, value: 1, priority: 20 }]
+    }];
+    let damageSave = actorD.effects.find(i => i.data.label === "Damage Save");
+    if (!damageSave) await MidiQOL.socket().executeAsGM("createEffects", { actorUuid: lastArg.actorUuid, effects: effectData });
+    await wait(600);
+    let attackWorkflow = workflow.damageList.map((i) => ({ tokenId: i?.tokenId, totalDamage: i?.totalDamage })).filter(i => i.tokenId === tokenD.id);
+    let lastAttack = attackWorkflow[attackWorkflow.length - 1];
+    if (lastAttack?.totalDamage > 0) {
+        let workflow = await MidiQOL.Workflow.getWorkflow(origin);
+        workflow.advantage = true;
+        let itemCard = await MidiQOL.showItemCard.bind(workflow.item)(false, workflow, false);
+        workflow.itemCardId = await itemCard.id;
         await workflow.checkSaves(false);
         await workflow.displaySaves(false, true);
         let save = await workflow.saveResults[0];
-        game.dice3d.showForRoll(save);
-        if (await save._total >= DC) {
-            let removeConc = workflow.actor.effects.entries.find(i=> i.data.label === "Concentrating");
-            if(removeConc){
-                await workflow.actor.deleteEmbeddedEntity("ActiveEffect", removeConc.data._id);
-            } else {
-                await tactor.deleteEmbeddedEntity("ActiveEffect", lastArg.effectId);
-            }
+        let DC = workflow.item.data.data.save.dc;
+        game.dice3d?.showForRoll(save);
+        await ui.chat.scrollBottom();
+        if (save.total >= DC) {
+            let removeConc = caster.effects.find(i => i.data.label === "Concentrating");
+            if (removeConc) await MidiQOL.socket().executeAsGM("removeEffects", { actorUuid: caster.uuid, effects: [removeConc.id] });
+        } else {
+            ChatMessage.create({
+                user: game.user._id,
+                speaker: ChatMessage.getSpeaker({ token: tokenD.document }),
+                content: `${tokenD.name} laughs maniacally`,
+                type: CONST.CHAT_MESSAGE_TYPES.EMOTE
+            });
         }
+    }
 }
 
-if(args[0]==="off"){
-    let hookId = DAE.getFlag(tactor, "hLaughter");
-    Hooks.off("midi-qol.DamageRollComplete", hookId);
-    DAE.unsetFlag(tactor, "hLaughter");
-    DAE.unsetFlag(tactor, "hLaughterHP");
-    let removeInc = ttoken.actor.effects.entries.find(i=> i.data.label === "Incapacitated");
-    await tactor.deleteEmbeddedEntity("ActiveEffect", removeInc.data._id);
+if (args[0] === "on") {
+    let hookId = await Hooks.on("midi-qol.DamageRollComplete", damageCheck);
+    await DAE.setFlag(actorD, "hLaughter", hookId);
+    if (!(game.modules.get("jb2a_patreon")?.active || game.modules.get("JB2A_DnD5e")?.active)) return {};
+    if (!(game.modules.get("sequencer")?.active)) return {};
+    console.warn("tokenD", tokenD);
+    new Sequence()
+        .effect()
+        .file("jb2a.toll_the_dead.purple.skull_smoke")
+        .atLocation(tokenD)
+        .scaleToObject(1.5)
+        .waitUntilFinished(-500)
+    .play()
 }
-})();
+
+if (args[0] === "off") {
+    let hookId = await DAE.getFlag(actorD, "hLaughter");
+    await Hooks.off("midi-qol.DamageRollComplete", hookId);
+    await DAE.unsetFlag(actorD, "hLaughter");
+    let conc = caster.effects.find(i => i.data.label === "Concentration");
+    if (conc) await MidiQOL.socket().executeAsGM("removeEffects", { actorUuid: caster.uuid, effects: [conc.id] });
+}
