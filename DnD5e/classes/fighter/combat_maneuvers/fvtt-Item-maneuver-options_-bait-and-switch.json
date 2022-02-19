@@ -1,0 +1,117 @@
+{
+  "name": "Maneuver Options: Bait and Switch",
+  "type": "feat",
+  "img": "icons/svg/dice-target.svg",
+  "data": {
+    "description": {
+      "value": "<div class=\"rd__b  rd__b--3\">\n<p>When you're within 5 feet of a creature on your turn, you can expend one superiority die and switch places with that creature, provided you spend at least 5 feet of movement and the creature is willing and isn't <span class=\"bold\" data-vet-page=\"conditionsdiseases.html\" data-vet-source=\"PHB\" data-vet-hash=\"incapacitated_phb\">incapacitated</span>. This movement doesn't provoke opportunity attacks.</p>\n<div class=\"rd__spc-inline-post\"> </div>\n<p>Roll the superiority die. Until the start of your next turn, you or the other creature (your choice) gains a bonus to AC equal to the number rolled.</p>\n<p> </p>\n<p><strong>Configure your ressource consumption in details (default is ressources.secondary.value).</strong></p>\n</div>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "TCE pg. 42",
+    "activation": {
+      "type": "special",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 0,
+      "units": ""
+    },
+    "target": {
+      "value": 0,
+      "width": null,
+      "units": "",
+      "type": ""
+    },
+    "range": {
+      "value": 5,
+      "long": 0,
+      "units": "ft"
+    },
+    "uses": {
+      "value": 0,
+      "max": "0",
+      "per": ""
+    },
+    "consume": {
+      "type": "attribute",
+      "target": "",
+      "amount": 1
+    },
+    "ability": "",
+    "actionType": "other",
+    "attackBonus": 0,
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": null
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "requirements": "Fighter 3 (Battle Master)",
+    "recharge": {
+      "value": 0,
+      "charged": true
+    }
+  },
+  "effects": [],
+  "flags": {
+    "srd5e": {
+      "page": "optionalfeatures.html",
+      "source": "TCE",
+      "hash": "bait%20and%20switch_tce"
+    },
+    "magicitems": {
+      "enabled": false,
+      "equipped": false,
+      "attuned": false,
+      "charges": "0",
+      "chargeType": "c1",
+      "destroy": false,
+      "destroyFlavorText": "reaches 0 charges: it crumbles into ashes and is destroyed.",
+      "rechargeable": false,
+      "recharge": "0",
+      "rechargeType": "t1",
+      "rechargeUnit": "r1",
+      "sorting": "l"
+    },
+    "midi-qol": {
+      "effectActivation": false,
+      "onUseMacroName": "[postActiveEffects]ItemMacro"
+    },
+    "itemacro": {
+      "macro": {
+        "data": {
+          "_id": null,
+          "name": "Maneuver Options: Bait and Switch",
+          "type": "script",
+          "author": "Xv8kOpT0YuRo8rso",
+          "img": "icons/svg/dice-target.svg",
+          "scope": "global",
+          "command": "console.warn(\"args :\", args);\nconst tokenA = args[0].targets[0];\nconst tokenB = await fromUuid(args[0].tokenUuid);\nconsole.warn(\"tokenA\", tokenA);\nconsole.warn(\"tokenB\", tokenB);\n\nconst lastArg = args[args.length - 1];\n\nlet acBonus = new Roll(`1d8`).evaluate({ async: false });\ngame.dice3d?.showForRoll(acBonus);\nconsole.warn(\"roll: \", acBonus.total);\n\nlet answer = await warpgate.menu({\n  buttons: [{\n    label: 'Myself',\n    value: tokenB\n  }, {\n    label: 'The Other',\n    value: tokenA\n  }]\n}, {\n  title: 'Who gets the AC Bonus',\n  options: {\n//    width: '400px',\n    height: '100%',    \n  }\n})\n\nconsole.warn(\"answer :\", answer.buttons);\n\nconst tokenAUpdates = {\n    token : {\n            x: tokenB.data.x, \n            y: tokenB.data.y\n        }\n}\nconst tokenBUpdates = {\n    token : {\n            x: tokenA.data.x, \n            y: tokenA.data.y\n        }\n}\n\nawait warpgate.mutate(tokenA, tokenAUpdates);\nawait warpgate.mutate(tokenB, tokenBUpdates);\n\nconst effect = {\n    embedded: {\n        ActiveEffect:{ \n            \"Bait and Switch\":{\n            icon : 'https://vtt.s3.eu-central-1.wasabisys.com/all/images/icons/own/body-swapping.svg',\n            changes: [{\n                \"key\": \"data.attributes.ac.value\",\n                \"mode\": CONST.ACTIVE_EFFECT_MODES.ADD,\n                \"value\": acBonus.total,\n                }],\n            flags: { dae: { itemData: lastArg.item, specialDuration: [\"turnStart\"] } },\n            duration : {rounds: 1},\n            label: 'Bait and Switch'\n            }\n        }\n    }\n}\nawait warpgate.mutate(answer.buttons, effect);\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n//await addAC();\n\nasync function addAC(){\n    let choice = \"\";\n    if (answer.buttons === false) {\n        choice = tokenA;\n    } else choice = answer.buttons;\n    console.warn(\"choice :\", choice);\n    if (args[0].tag === \"OnUse\") {\n    let itemD = lastArg.item;\n    let effectData = [{\n        changes: [\n            {key: \"data.attributes.ac.value\", value: acBonus.total, mode: CONST.ACTIVE_EFFECT_MODES.ADD}\n        ],\n        origin: lastArg.uuid,\n        disabled: false,\n        flags: { dae: { itemData: itemD, specialDuration: [\"turnStart\"] } },\n        icon: itemD.img,\n        label: itemD.name\n    }];\n    await MidiQOL.socket().executeAsGM(\"createEffects\", { actorUuid: choice.actor.uuid, effects: effectData });\n  }\n}",
+          "folder": null,
+          "sort": 0,
+          "permission": {
+            "default": 0
+          },
+          "flags": {}
+        }
+      }
+    },
+    "exportSource": {
+      "world": "tesira",
+      "system": "dnd5e",
+      "coreVersion": "9.249",
+      "systemVersion": "1.5.7"
+    }
+  }
+}

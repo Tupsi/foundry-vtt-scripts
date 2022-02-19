@@ -1,0 +1,291 @@
+{
+  "name": "Combat Superiority",
+  "type": "feat",
+  "img": "icons/svg/dice-target.svg",
+  "data": {
+    "description": {
+      "value": "<div class=\"rd__b  rd__b--1\"><p>When you choose this archetype at 3rd level, you learn maneuvers that are fueled by special dice called superiority dice.</p><div class=\"rd__b  rd__b--2\"><div class=\"rd__b  rd__b--3\"><span class=\"rd__h rd__h--3\" data-title-index=\"5\"> <span class=\"entry-title-inner\">Maneuvers.</span></span> <p>You learn three maneuvers of your choice, which are listed under \"Maneuvers\" below. Many maneuvers enhance an attack in some way. You can use only one maneuver per attack.</p><div class=\"rd__spc-inline-post\"></div><p>You learn two additional maneuvers of your choice at 7th, 10th, and 15th level. Each time you learn new maneuvers, you can also replace one maneuver you know with a different one.</p></div></div><div class=\"rd__b  rd__b--2\"><div class=\"rd__b  rd__b--3\"><span class=\"rd__h rd__h--3\" data-title-index=\"6\"> <span class=\"entry-title-inner\">Superiority Dice.</span></span> <p>You have four superiority dice, which are [[/r d8]]s. A superiority die is expended when you use it. You regain all of your expended superiority dice when you finish a short or long rest.</p><div class=\"rd__spc-inline-post\"></div><p>You gain another superiority die at 7th level and one more at 15th level.</p></div></div><div class=\"rd__b  rd__b--2\"><div class=\"rd__b  rd__b--3\"><span class=\"rd__h rd__h--3\" data-title-index=\"7\"> <span class=\"entry-title-inner\">Saving Throws.</span></span> <p>Some of your maneuvers require your target to make a saving throw to resist the maneuver's effects. The saving throw DC is calculated as follows:</p><div class=\"rd__spc-inline-post\"></div><p></p><div class=\"text-center\"><b>Maneuver save DC</b> = 8 + your proficiency bonus + your Strength or Dexterity modifier (your choice)</div><p></p></div></div></div>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "PHB pg. 73",
+    "activation": {
+      "type": "",
+      "cost": null,
+      "condition": ""
+    },
+    "duration": {
+      "value": null,
+      "units": ""
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": ""
+    },
+    "range": {
+      "value": null,
+      "long": null,
+      "units": ""
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": ""
+    },
+    "consume": {
+      "type": "",
+      "target": "",
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "other",
+    "attackBonus": 0,
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": null
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "d8",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "str"
+    },
+    "requirements": "Fighter 3 (Battle Master)",
+    "recharge": {
+      "value": null,
+      "charged": false
+    },
+    "flags": {
+      "srd5e": {
+        "dataType": "subclassFeature",
+        "className": "Fighter",
+        "subclassName": "Battle Master"
+      }
+    }
+  },
+  "effects": [
+    {
+      "_id": "T8fYhd1MyZCvoU3M",
+      "changes": [
+        {
+          "key": "data.resources.secondary.label",
+          "mode": 5,
+          "value": "Combat Superiority",
+          "priority": "20"
+        },
+        {
+          "key": "data.resources.secondary.lr",
+          "mode": 5,
+          "value": "1",
+          "priority": "20"
+        },
+        {
+          "key": "data.resources.secondary.sr",
+          "mode": 5,
+          "value": "1",
+          "priority": "20"
+        },
+        {
+          "key": "data.resources.secondary.max",
+          "mode": 5,
+          "value": "4+floor((@classes.fighter.levels+1)/8)",
+          "priority": "20"
+        },
+        {
+          "key": "flags.midi-qol.optional.combatsuperiority.label",
+          "mode": 5,
+          "value": "Superiority Die",
+          "priority": "20"
+        },
+        {
+          "key": "flags.midi-qol.optional.combatsuperiority.damage.all",
+          "mode": 5,
+          "value": "1d8",
+          "priority": "20"
+        },
+        {
+          "key": "flags.midi-qol.optional.combatsuperiority.count",
+          "mode": 5,
+          "value": "@resources.secondary.value",
+          "priority": "20"
+        },
+        {
+          "key": "flags.midi-qol.optional.combatsuperiority.skill.itm",
+          "mode": 5,
+          "value": "1d8",
+          "priority": "20"
+        },
+        {
+          "key": "flags.midi-qol.optional.combatsuperiority.skill.prf",
+          "mode": 5,
+          "value": "1d8",
+          "priority": "20"
+        },
+        {
+          "key": "flags.midi-qol.optional.combatsuperiority.skill.per",
+          "mode": 5,
+          "value": "1d8",
+          "priority": "20"
+        }
+      ],
+      "disabled": false,
+      "duration": {
+        "startTime": null
+      },
+      "icon": "icons/svg/dice-target.svg",
+      "label": "Combat Superiority",
+      "transfer": true,
+      "flags": {
+        "core": {
+          "statusId": ""
+        },
+        "dae": {
+          "stackable": "none",
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": [],
+          "transfer": true
+        },
+        "dnd5e-helpers": {
+          "rest-effect": "Ignore"
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "radius": null,
+          "alignment": "",
+          "type": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false
+        }
+      },
+      "tint": "#000000",
+      "selectedKey": [
+        "data.resources.secondary.label",
+        "data.resources.secondary.lr",
+        "data.resources.secondary.sr",
+        "data.resources.secondary.max",
+        "__",
+        "__",
+        "__",
+        "__",
+        "__",
+        "__"
+      ]
+    }
+  ],
+  "flags": {
+    "betterRolls5e": {
+      "critRange": {
+        "type": "String",
+        "value": ""
+      },
+      "critDamage": {
+        "type": "String",
+        "value": ""
+      },
+      "quickDesc": {
+        "type": "Boolean",
+        "value": true,
+        "altValue": true
+      },
+      "quickAttack": {
+        "type": "Boolean",
+        "value": true,
+        "altValue": true
+      },
+      "quickSave": {
+        "type": "Boolean",
+        "value": true,
+        "altValue": true
+      },
+      "quickDamage": {
+        "type": "Array",
+        "value": [],
+        "altValue": [],
+        "context": []
+      },
+      "quickProperties": {
+        "type": "Boolean",
+        "value": true,
+        "altValue": true
+      },
+      "quickCharges": {
+        "type": "Boolean",
+        "value": {
+          "use": true,
+          "resource": true,
+          "charge": false
+        },
+        "altValue": {
+          "use": true,
+          "resource": true,
+          "charge": false
+        }
+      },
+      "quickTemplate": {
+        "type": "Boolean",
+        "value": true,
+        "altValue": true
+      },
+      "quickOther": {
+        "type": "Boolean",
+        "value": true,
+        "altValue": true,
+        "context": ""
+      },
+      "quickFlavor": {
+        "type": "Boolean",
+        "value": true,
+        "altValue": true
+      },
+      "quickPrompt": {
+        "type": "Boolean",
+        "value": false,
+        "altValue": false
+      }
+    },
+    "favtab": {
+      "isFavorite": true,
+      "sort": 100000
+    },
+    "midi-qol": {
+      "onUseMacroName": "",
+      "effectActivation": false
+    },
+    "magicitems": {
+      "enabled": false,
+      "equipped": false,
+      "attuned": false,
+      "charges": "0",
+      "chargeType": "c1",
+      "destroy": false,
+      "destroyFlavorText": "reaches 0 charges: it crumbles into ashes and is destroyed.",
+      "rechargeable": false,
+      "recharge": "0",
+      "rechargeType": "t1",
+      "rechargeUnit": "r1",
+      "sorting": "l"
+    },
+    "core": {
+      "sourceId": "Item.5LFa4wOBko2GT4Fg"
+    },
+    "exportSource": {
+      "world": "tesira",
+      "system": "dnd5e",
+      "coreVersion": "9.249",
+      "systemVersion": "1.5.7"
+    }
+  }
+}

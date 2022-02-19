@@ -1,0 +1,117 @@
+{
+  "name": "Maneuvers: Evasive Footwork",
+  "type": "feat",
+  "img": "icons/svg/dice-target.svg",
+  "data": {
+    "description": {
+      "value": "<div>\n<div class=\"rd__b  rd__b--3\">\n<p>When you move, you can expend one superiority die, rolling the die and adding the number rolled to your AC until you stop moving.</p>\n<div class=\"rd__spc-inline-post\"> </div>\n<div class=\"rd__spc-inline-post\"><strong>Configure your ressource consumption in details (default is ressources.secondary.value).</strong></div>\n</div>\n</div>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "PHB pg. 74",
+    "activation": {
+      "type": "special",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 0,
+      "units": ""
+    },
+    "target": {
+      "value": 0,
+      "width": null,
+      "units": "",
+      "type": ""
+    },
+    "range": {
+      "value": 0,
+      "long": 0,
+      "units": ""
+    },
+    "uses": {
+      "value": 0,
+      "max": "0",
+      "per": ""
+    },
+    "consume": {
+      "type": "attribute",
+      "target": "",
+      "amount": 1
+    },
+    "ability": "",
+    "actionType": "other",
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "requirements": "Fighter 7 (Battle Master)",
+    "recharge": {
+      "value": 0,
+      "charged": true
+    }
+  },
+  "effects": [],
+  "flags": {
+    "srd5e": {
+      "page": "optionalfeatures.html",
+      "source": "PHB",
+      "hash": "evasive%20footwork_phb"
+    },
+    "magicitems": {
+      "enabled": false,
+      "equipped": false,
+      "attuned": false,
+      "charges": "0",
+      "chargeType": "c1",
+      "destroy": false,
+      "destroyFlavorText": "reaches 0 charges: it crumbles into ashes and is destroyed.",
+      "rechargeable": false,
+      "recharge": "0",
+      "rechargeType": "t1",
+      "rechargeUnit": "r1",
+      "sorting": "l"
+    },
+    "midi-qol": {
+      "effectActivation": false,
+      "onUseMacroName": "[postActiveEffects]ItemMacro"
+    },
+    "itemacro": {
+      "macro": {
+        "data": {
+          "_id": null,
+          "name": "Maneuvers: Evasive Footwork",
+          "type": "script",
+          "author": "Xv8kOpT0YuRo8rso",
+          "img": "icons/svg/dice-target.svg",
+          "scope": "global",
+          "command": "console.warn(\"args :\", args);\nconst tokenA = args[0].targets[0];\nconst tokenB = await fromUuid(args[0].tokenUuid);\nconsole.warn(\"tokenA\", tokenA);\nconsole.warn(\"tokenB\", tokenB);\n\nconst lastArg = args[args.length - 1];\n\nlet acBonus = new Roll(`1d8`).evaluate({ async: false });\ngame.dice3d?.showForRoll(acBonus);\nconsole.warn(\"roll: \", acBonus.total);\n\nconst effect = {\n    embedded: {\n        ActiveEffect:{ \n            \"Evasive Footwork\":{\n            icon : 'https://vtt.s3.eu-central-1.wasabisys.com/all/images/icons/own/evasion.svg',\n            changes: [{\n                \"key\": \"data.attributes.ac.value\",\n                \"mode\": CONST.ACTIVE_EFFECT_MODES.ADD,\n                \"value\": acBonus.total,\n                }],\n            duration : {rounds: 999},\n            label: 'Evasive Footwork'\n            }\n        }\n    }\n}\nawait warpgate.mutate(tokenB, effect);",
+          "folder": null,
+          "sort": 0,
+          "permission": {
+            "default": 0
+          },
+          "flags": {}
+        }
+      }
+    },
+    "exportSource": {
+      "world": "tesira",
+      "system": "dnd5e",
+      "coreVersion": "9.249",
+      "systemVersion": "1.5.7"
+    }
+  }
+}

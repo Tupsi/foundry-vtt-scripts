@@ -1,0 +1,226 @@
+{
+  "name": "Maneuvers: Disarming Attack",
+  "type": "feat",
+  "img": "icons/svg/dice-target.svg",
+  "data": {
+    "description": {
+      "value": "<div>\n<div class=\"rd__b  rd__b--3\">\n<p><span style=\"color:#191813;font-size:13px\">When you hit a creature with a weapon attack, you can expend one superiority die to attempt to disarm the target, forcing it to drop one item of your choice that it's holding. You add the superiority die to the attack's damage roll, and the target must make a Strength saving throw. On a failed save, it drops the object you choose. The object lands at its feet.</span></p>\n<p> </p>\n<p><strong><span style=\"color:#191813;font-size:13px\">User your superiority die during your attack and use this special action afterwards.</span></strong></p>\n</div>\n</div>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "PHB pg. 74",
+    "activation": {
+      "type": "special",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 0,
+      "units": ""
+    },
+    "target": {
+      "value": 0,
+      "width": null,
+      "units": "",
+      "type": ""
+    },
+    "range": {
+      "value": 0,
+      "long": 0,
+      "units": ""
+    },
+    "uses": {
+      "value": 0,
+      "max": "0",
+      "per": ""
+    },
+    "consume": {
+      "type": "attribute",
+      "target": "",
+      "amount": 1
+    },
+    "ability": "",
+    "actionType": "save",
+    "attackBonus": 0,
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": null
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "str",
+      "dc": null,
+      "scaling": "str"
+    },
+    "requirements": "Fighter 3 (Battle Master)",
+    "recharge": {
+      "value": 0,
+      "charged": true
+    },
+    "flags": {
+      "srd5e": {
+        "dataType": "subclassFeature",
+        "className": "Fighter",
+        "subclassName": "Battle Master"
+      }
+    }
+  },
+  "effects": [],
+  "flags": {
+    "betterRolls5e": {
+      "critRange": {
+        "type": "String",
+        "value": ""
+      },
+      "critDamage": {
+        "type": "String",
+        "value": ""
+      },
+      "quickDesc": {
+        "type": "Boolean",
+        "value": true,
+        "altValue": true
+      },
+      "quickAttack": {
+        "type": "Boolean",
+        "value": true,
+        "altValue": true
+      },
+      "quickSave": {
+        "type": "Boolean",
+        "value": true,
+        "altValue": true
+      },
+      "quickDamage": {
+        "type": "Array",
+        "value": [],
+        "altValue": [],
+        "context": []
+      },
+      "quickProperties": {
+        "type": "Boolean",
+        "value": true,
+        "altValue": true
+      },
+      "quickCharges": {
+        "type": "Boolean",
+        "value": {
+          "use": true,
+          "resource": true,
+          "charge": false
+        },
+        "altValue": {
+          "use": true,
+          "resource": true,
+          "charge": false
+        }
+      },
+      "quickTemplate": {
+        "type": "Boolean",
+        "value": true,
+        "altValue": true
+      },
+      "quickOther": {
+        "type": "Boolean",
+        "value": true,
+        "altValue": true,
+        "context": ""
+      },
+      "quickFlavor": {
+        "type": "Boolean",
+        "value": true,
+        "altValue": true
+      },
+      "quickPrompt": {
+        "type": "Boolean",
+        "value": false,
+        "altValue": false
+      }
+    },
+    "favtab": {
+      "isFavorite": true,
+      "sort": 300000
+    },
+    "magicitems": {
+      "enabled": false,
+      "equipped": false,
+      "attuned": false,
+      "charges": "0",
+      "chargeType": "c1",
+      "destroy": false,
+      "destroyFlavorText": "reaches 0 charges: it crumbles into ashes and is destroyed.",
+      "rechargeable": false,
+      "recharge": "0",
+      "rechargeType": "t1",
+      "rechargeUnit": "r1",
+      "sorting": "l"
+    },
+    "autoanimations": {
+      "killAnim": false,
+      "below": false,
+      "override": false,
+      "targetToken": {
+        "enable": false
+      },
+      "sourceToken": {
+        "enable": false
+      },
+      "allSounds": {},
+      "autoOverride": {
+        "enable": false
+      },
+      "version": 2,
+      "audio": {
+        "a01": {
+          "enable": false,
+          "file": "",
+          "delay": 0,
+          "volume": 0.25
+        },
+        "e01": {
+          "enable": false,
+          "file": "",
+          "delay": 0,
+          "volume": 0.25
+        }
+      }
+    },
+    "midi-qol": {
+      "effectActivation": false,
+      "onUseMacroName": "[postActiveEffects]ItemMacro"
+    },
+    "core": {
+      "sourceId": "Item.sbENd5T8SRG1UJ1t"
+    },
+    "itemacro": {
+      "macro": {
+        "data": {
+          "_id": null,
+          "name": "Maneuvers: Disarming Attack",
+          "type": "script",
+          "author": "Xv8kOpT0YuRo8rso",
+          "img": "icons/svg/dice-target.svg",
+          "scope": "global",
+          "command": "let effect = 'Disarmed';\nfor (let targetUuid of args[0].failedSaveUuids) {\n    let checkEffect = await game.dfreds.effectInterface.hasEffectApplied(effect, targetUuid);\n    if (!checkEffect) {\n        await game.dfreds.effectInterface.addEffect({ effectName: effect, uuid: targetUuid});\n    }\n}",
+          "folder": null,
+          "sort": 0,
+          "permission": {
+            "default": 0
+          },
+          "flags": {}
+        }
+      }
+    },
+    "exportSource": {
+      "world": "tesira",
+      "system": "dnd5e",
+      "coreVersion": "9.249",
+      "systemVersion": "1.5.7"
+    }
+  }
+}

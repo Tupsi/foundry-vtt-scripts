@@ -1,0 +1,147 @@
+{
+  "name": "Maneuvers: Menacing Attack",
+  "type": "feat",
+  "img": "icons/svg/dice-target.svg",
+  "data": {
+    "description": {
+      "value": "<div>\n<div class=\"rd__b  rd__b--3\">\n<p>When you hit a creature with a weapon attack, you can expend one superiority die to attempt to frighten the target. You add the superiority die to the attack's damage roll, and the target must make a Wisdom saving throw. On a failed save, it is @condition[frightened] of you until the end of your next turn.</p>\n<div class=\"rd__spc-inline-post\"> </div>\n<div class=\"rd__spc-inline-post\"><strong>Use your superiority die during the attack, then use this special action afterwards.</strong></div>\n</div>\n</div>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "PHB pg. 74",
+    "activation": {
+      "type": "special",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 0,
+      "units": ""
+    },
+    "target": {
+      "value": 0,
+      "width": null,
+      "units": "",
+      "type": ""
+    },
+    "range": {
+      "value": 0,
+      "long": 0,
+      "units": ""
+    },
+    "uses": {
+      "value": 0,
+      "max": "0",
+      "per": ""
+    },
+    "consume": {
+      "type": "",
+      "target": "",
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "save",
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "wis",
+      "dc": null,
+      "scaling": "str"
+    },
+    "requirements": "Fighter 7 (Battle Master)",
+    "recharge": {
+      "value": 0,
+      "charged": true
+    }
+  },
+  "effects": [
+    {
+      "_id": "TGpTT475d7dtIRkb",
+      "changes": [
+        {
+          "key": "StatusEffect",
+          "mode": 0,
+          "value": "Convenient Effect: Frightened",
+          "priority": "20"
+        }
+      ],
+      "disabled": false,
+      "duration": {
+        "startTime": null
+      },
+      "icon": "https://vtt.s3.eu-central-1.wasabisys.com/all/images/icons/own/evil-fork.svg",
+      "label": "Maneuvers: Menacing Attack",
+      "transfer": false,
+      "flags": {
+        "core": {
+          "statusId": ""
+        },
+        "dae": {
+          "stackable": "none",
+          "durationExpression": "",
+          "macroRepeat": "none",
+          "specialDuration": [
+            "turnStartSource"
+          ]
+        },
+        "dnd5e-helpers": {
+          "rest-effect": "Ignore"
+        },
+        "ActiveAuras": {
+          "isAura": false,
+          "aura": "None",
+          "radius": null,
+          "alignment": "",
+          "type": "",
+          "ignoreSelf": false,
+          "height": false,
+          "hidden": false,
+          "displayTemp": false,
+          "hostile": false,
+          "onlyOnce": false
+        }
+      },
+      "tint": null,
+      "selectedKey": "StatusEffect"
+    }
+  ],
+  "flags": {
+    "srd5e": {
+      "page": "optionalfeatures.html",
+      "source": "PHB",
+      "hash": "menacing%20attack_phb"
+    },
+    "magicitems": {
+      "enabled": false,
+      "equipped": false,
+      "attuned": false,
+      "charges": "0",
+      "chargeType": "c1",
+      "destroy": false,
+      "destroyFlavorText": "reaches 0 charges: it crumbles into ashes and is destroyed.",
+      "rechargeable": false,
+      "recharge": "0",
+      "rechargeType": "t1",
+      "rechargeUnit": "r1",
+      "sorting": "l"
+    },
+    "midi-qol": {
+      "effectActivation": false
+    },
+    "exportSource": {
+      "world": "tesira",
+      "system": "dnd5e",
+      "coreVersion": "9.249",
+      "systemVersion": "1.5.7"
+    }
+  }
+}
