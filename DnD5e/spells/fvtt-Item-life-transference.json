@@ -1,0 +1,131 @@
+{
+  "name": "Life Transference",
+  "type": "spell",
+  "img": "icons/magic/life/cross-beam-green.webp",
+  "data": {
+    "description": {
+      "value": "<div class=\"rd__b  rd__b--3\"><p>You sacrifice some of your health to mend another creature's injuries. You take [[/r 4d8]] necrotic damage, which can't be reduced in any way, and one creature of your choice that you can see within range regains a number of hit points equal to twice the necrotic damage you take.</p><div class=\"rd__spc-inline-post\"></div></div><div class=\"rd__b  rd__b--3\"><div class=\"rd__b  rd__b--3\"><span class=\"rd__h rd__h--3\" data-title-index=\"161\"> <span class=\"entry-title-inner\">At Higher Levels.</span></span> <p>When you cast this spell using a spell slot of 4th level or higher, the damage increases by [[/r 1d8]] for each slot level above 3rd.</p><div class=\"rd__spc-inline-post\"></div></div><div class=\"rd__spc-inline-post\"></div></div>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "XGE pg. 160",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": null,
+      "units": "inst"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "self"
+    },
+    "range": {
+      "value": 30,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": 0,
+      "max": "0",
+      "per": ""
+    },
+    "consume": {
+      "type": "",
+      "target": "",
+      "amount": null
+    },
+    "ability": "wis",
+    "actionType": "util",
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [
+        [
+          "4d8",
+          "necrotic"
+        ]
+      ],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "wis"
+    },
+    "level": 3,
+    "school": "nec",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": false,
+      "ritual": false,
+      "concentration": false
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": true
+    },
+    "scaling": {
+      "mode": "level",
+      "formula": "1d8"
+    }
+  },
+  "effects": [],
+  "flags": {
+    "srd5e": {
+      "page": "spells.html",
+      "source": "XGE",
+      "hash": "life%20transference_xge",
+      "propDroppable": "spell"
+    },
+    "midi-qol": {
+      "effectActivation": false,
+      "onUseMacroName": "[postActiveEffects]ItemMacro"
+    },
+    "itemacro": {
+      "macro": {
+        "data": {
+          "_id": null,
+          "name": "Life Transference",
+          "type": "script",
+          "author": "Xv8kOpT0YuRo8rso",
+          "img": "icons/svg/dice-target.svg",
+          "scope": "global",
+          "command": "// Macro Author: Tupsi#7299 (on discord)\n// Macro version: 1.0\n// Foundry Version: 0.9.249\n// DnD5e Version: 1.5.7\n// Prerequisites: Advanced Macros, Midi-QOL, JB2A Patreon Animation, Sequencer\n//\n// Usage: Use as ItemMacro in the spell item, \n// // //  configure the the spell item todo the necrotic damage to the caster (target self).\n// // //  Needs the beneficiary as target.\n//\n// Checks if the caster has Disciple of Life and adds it to the heal.\n//\n// v 1.0 initial version\n\nlet target = Array.from(game.user.targets)[0];\nlet actorD = await fromUuid(args[0].actorUuid);\nlet tokenD = await fromUuid(args[0].tokenUuid);\nlet healing = args[0].damageDetail[0].damage;\nhealing *= 2;\nlet checkFeature = actorD.items.find(i => i.name === \"Disciple of Life\");\nif (checkFeature) {\n    healing = healing + 2 + args[0].spellLevel;\n}\n\nconsole.warn(\"healing:\", healing);\nlet damageType = \"healing\";\nlet damageRoll = await new Roll(`${healing}[${damageType}]`).evaluate({ async: true });\n\nnew MidiQOL.DamageOnlyWorkflow(actorD, tokenD, damageRoll.total, damageType, target ? [target] : [], damageRoll, { flavor: `Life flows from ${actorD.data.name} to ${target.data.name}`, itemCardId: args[0].itemCardId});\n\nlet seq = new Sequence();\nseq.effect()\n .file(\"jb2a.energy_beam.normal.greenyellow.03\")\n .atLocation(tokenD)\n .stretchTo(target);\nseq.play()",
+          "folder": null,
+          "sort": 0,
+          "permission": {
+            "default": 0
+          },
+          "flags": {}
+        }
+      }
+    },
+    "core": {
+      "sourceId": "Item.fbbGmVhkPoXjE1TE"
+    },
+    "exportSource": {
+      "world": "tesira",
+      "system": "dnd5e",
+      "coreVersion": "9.249",
+      "systemVersion": "1.5.7"
+    }
+  }
+}

@@ -1,12 +1,12 @@
-// Macro Author: Tupsi#7299 (on discord) initial version from Crymic
+// Macro Author: Tupsi#7299 (on discord)
 // Macro version: 1.0
 // Foundry Version: 0.9.249
 // DnD5e Version: 1.5.7
 // Prerequisites: Advanced Macros, Midi-QOL
 //
-// Thanks to david (aka claudekennilol)#2244 for the initial macro
+// Thanks to Crymic#9452 for the initial macro
 //
-// Usage: Use as ItemMacro in the spell item
+// Usage: Use as ItemMacro in the feature item
 //
 // v 1.0 initial version
 
