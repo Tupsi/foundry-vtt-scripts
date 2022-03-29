@@ -4,7 +4,7 @@
   "img": "modules/plutonium/media/icon/spell/phb-grease.jpg",
   "data": {
     "description": {
-      "value": "<div class=\"rd__b  rd__b--3\"><p>Slick grease covers the ground in a 10-foot square centered on a point within range and turns it into difficult terrain for the duration.</p><div class=\"rd__spc-inline-post\"></div><p>When the grease appears, each creature standing in its area must succeed on a Dexterity saving throw or fall <a href=\"https://5e.tools/conditionsdiseases.html#prone_phb\">prone</a>. A creature that enters the area or ends its turn there must also succeed on a Dexterity saving throw or fall <a href=\"https://5e.tools/conditionsdiseases.html#prone_phb\">prone</a>.</p></div>",
+      "value": "<div class=\"rd__b  rd__b--3\">\n<p>Slick grease covers the ground in a 10-foot square centered on a point within range and turns it into difficult terrain for the duration.</p>\n<div class=\"rd__spc-inline-post\"> </div>\n<p>When the grease appears, each creature standing in its area must succeed on a Dexterity saving throw or fall <a href=\"https://5e.tools/conditionsdiseases.html#prone_phb\">prone</a>. A creature that enters the area or ends its turn there must also succeed on a Dexterity saving throw or fall <a href=\"https://5e.tools/conditionsdiseases.html#prone_phb\">prone</a>.</p>\n<p> </p>\n</div>",
       "chat": "",
       "unidentified": ""
     },
@@ -80,58 +80,10 @@
     "scaling": {
       "mode": "none",
       "formula": ""
-    }
+    },
+    "attunement": 0
   },
-  "effects": [
-    {
-      "_id": "64qud1z9wzfd44e8",
-      "changes": [
-        {
-          "key": "macro.CE",
-          "mode": 0,
-          "value": "Prone",
-          "priority": "20"
-        }
-      ],
-      "disabled": false,
-      "duration": {
-        "startTime": null
-      },
-      "icon": "modules/plutonium/media/icon/spell/phb-grease.jpg",
-      "label": "Grease",
-      "transfer": false,
-      "flags": {
-        "core": {
-          "statusId": ""
-        },
-        "dae": {
-          "stackable": "none",
-          "durationExpression": "",
-          "macroRepeat": "none",
-          "specialDuration": [],
-          "transfer": false
-        },
-        "dnd5e-helpers": {
-          "rest-effect": "Ignore"
-        },
-        "ActiveAuras": {
-          "isAura": false,
-          "aura": "None",
-          "radius": null,
-          "alignment": "",
-          "type": "",
-          "ignoreSelf": false,
-          "height": false,
-          "hidden": false,
-          "displayTemp": false,
-          "hostile": false,
-          "onlyOnce": false
-        }
-      },
-      "tint": "",
-      "selectedKey": "macro.CE"
-    }
-  ],
+  "effects": [],
   "flags": {
     "srd5e": {
       "page": "spells.html",
@@ -152,7 +104,7 @@
       }
     },
     "midi-qol": {
-      "onUseMacroName": "",
+      "onUseMacroName": "[postActiveEffects]ItemMacro",
       "effectActivation": false
     },
     "autoanimations": {
@@ -245,8 +197,27 @@
       "toggleEffect": false
     },
     "scene-packer": {
-      "hash": "6651fc9f589796643502c1e4a88e613fafd9a187",
-      "sourceId": "Item.IPjG96vpI5jf3i5q"
+      "hash": "c12489e57af24a314e8c3cd067dc0af2f36f0db7",
+      "sourceId": "Item.lSqZhnZL4o6KOrY5"
+    },
+    "itemacro": {
+      "macro": {
+        "data": {
+          "_id": null,
+          "name": "Grease",
+          "type": "script",
+          "author": "Xv8kOpT0YuRo8rso",
+          "img": "icons/svg/dice-target.svg",
+          "scope": "global",
+          "command": "let tileGreaseUuid = DAE.getFlag(args[0].actorUuid, \"tileGrease\");\n\n// everyone on the grease tile gets the grease effect\nlet effect = 'Greased';\nfor (let targetUuid of args[0].targetUuids) {\n    let checkEffect = await game.dfreds.effectInterface.hasEffectApplied(effect, targetUuid);\n    if (!checkEffect) {\n        await game.dfreds.effectInterface.addEffect({ effectName: effect, uuid: targetUuid});\n    }\n}\n\n// failing the save gets your prone as well\neffect = 'Prone';\nfor (let targetUuid of args[0].failedSaveUuids) {\n    let checkEffect = await game.dfreds.effectInterface.hasEffectApplied(effect, targetUuid);\n    if (!checkEffect) {\n        await game.dfreds.effectInterface.addEffect({ effectName: effect, uuid: targetUuid});\n    }\n}",
+          "folder": null,
+          "sort": 0,
+          "permission": {
+            "default": 0
+          },
+          "flags": {}
+        }
+      }
     },
     "exportSource": {
       "world": "tesira",
