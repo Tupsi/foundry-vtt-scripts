@@ -1,6 +1,6 @@
 // Macro Author: Tupsi#7299 (on discord)
-// Macro version: 1.0
-// Foundry Version: 0.9.249
+// Macro version: 1.1
+// Foundry Version: 0.10.291
 // twodsix Version: 
 // Prerequisites: 
 //
@@ -12,22 +12,31 @@
 // and rolls the attack.
 //
 // v 1.0 initial release
+// v 1.1 fixes for v10
 /////////////////////////////////////////////////////////////////////////
 // you get this by dragging your weapon of choice to your macro bar and open the macro
-let weaponId = "r27jcEvYKR3kRBXz";
+// or open the item and look in the upper left corner.
+let weaponId = "bp4Sv3YlG322ZojR";
+//let weaponId = "r27jcEvYKR3kRBXz";
 /////////////////////////////////////////////////////////////////////////
 
-let characterId = game.user.data.character;
-let actor = game.actors.get(characterId);
-let weapon = actor.data.items.filter( i => i.id === weaponId)[0];
-console.warn(weapon);
-let ammoChoices = weapon.data.data.consumables.reduce((acc, i) => acc += `<option value="${i}">${actor.data.items.filter( y => y.id === i)[0].name} `,``);
+// debugging stuff
+//console.log("------------------");
+//console.log(actor);
+//let characterId = game.user.character;
 
-let ammoChoicesIds = weapon.data.data.consumables;
-foreach (int i in ammoChoicesIds) {
-
-}
-
+let weapon = actor.items.filter( i => i.id === weaponId)[0];
+//console.log(weapon);
+let currentAmmoId = weapon.system.useConsumableForAttack;
+let ammoChoices = ``;
+weapon.system.consumables.forEach((ammoId) => {
+    let setCurrent = ``;
+    if (ammoId === currentAmmoId) {
+        setCurrent = `selected="selected"`;
+    }
+    
+    ammoChoices += `<option value="${ammoId}" ${setCurrent}>${actor.items.filter( y => y.id === ammoId)[0].name} `;
+});
 content = `<form>
                     <div class="form-group">
                         <label>Ammo: </label>
@@ -37,7 +46,7 @@ content = `<form>
 
 
 let ammoDialog = new Dialog({
-    title: "Ammo selector",
+    title: `Ammo selector for ${weapon.name}`,
     content,
     buttons: {
         fire: {
@@ -45,7 +54,7 @@ let ammoDialog = new Dialog({
             callback: async (html) => {
                 const ammoId = html.find("#ammo-selector")[0].value;
                 console.warn("ammo selected", ammoId);
-                await weapon.update({ "data.useConsumableForAttack": ammoId});
+                await weapon.update({ "useConsumableForAttack": ammoId});
                 game.twodsix.rollItemMacro(weaponId);
             }
         },
@@ -56,4 +65,3 @@ let ammoDialog = new Dialog({
 });
 
 ammoDialog.render(true);
-
